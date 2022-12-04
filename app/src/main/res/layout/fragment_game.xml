@@ -72,17 +72,18 @@
         tools:visibility="visible" />
 
     <EditText
-        style="@style/Text.Game.Input"
         android:id="@+id/kanaInput"
-        android:hint="@string/hint_game_input"
+        style="@style/Text.Game.Input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="3"
-        android:inputType="text"
+        android:hint="@string/hint_game_input"
+        android:importantForAutofill="no"
+        android:inputType="textVisiblePassword"
+        android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_kana"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toBottomOf="@+id/text_kana" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

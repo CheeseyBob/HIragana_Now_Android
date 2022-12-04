@@ -25,6 +25,7 @@
     <string name="text_free_pass">★★★ Free Pass ★★★</string>
 
     <!-- Messages -->
+    <string name="message_empty_input">Type an answer or press the "pass" button</string>
     <string name="message_invalid_kana">That is not the romaji for any kana</string>
     <string name="message_out_of_passes">You have no passes left!</string>
 </resources>
