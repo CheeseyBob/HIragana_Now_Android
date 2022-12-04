@@ -6,9 +6,9 @@ import java.util.List;
 public class Kana {
     static List<Kana> fullList;
 
-    String character;
-    String romaji;
-    boolean isNewToPlayer = true;
+    final String character;
+    final String romaji;
+    boolean isNewToPlayer = true; // TODO - Replace this with a HashSet<Kana> of known kana in Game class.
 
     static boolean isValidRomaji(String romaji){
         for(Kana hiragana : fullList){
@@ -185,7 +185,7 @@ public class Kana {
     }
 
     private static void loadCharacterData(String[] data){
-        fullList = new ArrayList<Kana>();
+        fullList = new ArrayList<>();
         for(int i = 0; i < data.length; i += 2){
             fullList.add(new Kana(data[i], data[i+1]));
         }

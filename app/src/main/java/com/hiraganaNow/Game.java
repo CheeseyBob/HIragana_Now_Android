@@ -4,12 +4,12 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 
 public class Game {
-    static LinkedList<Kana> currentKanaList = new LinkedList<>();
-    static LinkedList<Kana> remainingKanaList = new LinkedList<>();
-    static LinkedList<Kana> kanaLineupThisLevel = new LinkedList<>();
-    static LinkedList<Kana> failedKanaList = new LinkedList<>();
-    static Kana currentKana = null;
+    private final static LinkedList<Kana> currentKanaList = new LinkedList<>();
+    private final static LinkedList<Kana> remainingKanaList = new LinkedList<>();
+    private final static LinkedList<Kana> kanaLineupThisLevel = new LinkedList<>();
+    private final static LinkedList<Kana> failedKanaList = new LinkedList<>();
 
+    private static Kana currentKana = null;
     private static int lives = 0;
     private static int passes = 0;
     private static int progress = 0;
@@ -25,6 +25,10 @@ public class Game {
     private static final int STARTING_HP = 5;
     private static final int STARTING_PASSES = 3;
     private static final int STARTING_NEW_KANA = 2;
+
+    public static String getCurrentKana() {
+        return currentKana.character;
+    }
 
     public static int getLevel() {
         return level;
@@ -69,6 +73,7 @@ public class Game {
         // Check whether the input is correct. //
         if(input.equals(currentKana.romaji)) {
             currentKana.isNewToPlayer = false;
+            nextCharacter();
             return TestResult.SUCCESS;
         } else {
             lives--;
@@ -120,11 +125,13 @@ public class Game {
         nonFreePassesUsed = 0;
         progress = 0;
 
+        /* TODO ...
         if(isThisTheFinalLevel){
-            // TODO new GameWinEffect();
+            new GameWinEffect();
         } else {
-            // TODO new LevelUpEffect();
+            new LevelUpEffect();
         }
+        */
     }
 
     private static void nextCharacter() {
@@ -200,7 +207,7 @@ public class Game {
     }
 
     private static <X> void shuffle(LinkedList<X> listToShuffle){
-        LinkedList<X> shuffledList = new LinkedList<X>();
+        LinkedList<X> shuffledList = new LinkedList<>();
         while(!listToShuffle.isEmpty()){
             shuffledList.add(removeRandom(listToShuffle));
         }
@@ -208,10 +215,10 @@ public class Game {
     }
 
     public enum Mode {
-        HIRAGANA, KATAKANA;
+        HIRAGANA, KATAKANA
     }
 
     public enum TestResult {
-        INVALID, FAILURE, SUCCESS;
+        INVALID, FAILURE, SUCCESS
     }
 }

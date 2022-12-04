@@ -23,4 +23,27 @@
     <color name="blue_8">#0000cc</color>
     <color name="blue_9">#0000e5</color>
     <color name="blue_10">#0000ff</color>
+
+    <color name="green_1">#001900</color>
+    <color name="green_2">#003300</color>
+    <color name="green_3">#004c00</color>
+    <color name="green_4">#006600</color>
+    <color name="green_5">#007f00</color>
+    <color name="green_6">#009900</color>
+    <color name="green_7">#00b200</color>
+    <color name="green_8">#00cc00</color>
+    <color name="green_9">#00e500</color>
+    <color name="green_10">#00ff00</color>
+
+    <color name="red_1">#190000</color>
+    <color name="red_2">#330000</color>
+    <color name="red_3">#4c0000</color>
+    <color name="red_4">#660000</color>
+    <color name="red_5">#7f0000</color>
+    <color name="red_6">#990000</color>
+    <color name="red_7">#b20000</color>
+    <color name="red_8">#cc0000</color>
+    <color name="red_9">#e50000</color>
+    <color name="red_10">#ff0000</color>
+
 </resources>
