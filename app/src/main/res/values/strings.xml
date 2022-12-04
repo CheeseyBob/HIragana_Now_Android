@@ -16,8 +16,15 @@
     <string name="button_info">More info</string>
     <string name="button_pass">Pass</string>
 
+    <!-- Inputs -->
+    <string name="hint_game_input">…</string>
+
     <!-- Text -->
     <string name="text_hiragana">ひ\nら\nが\nな</string>
     <string name="text_katakana">カ\nタ\nカ\nナ</string>
     <string name="text_free_pass">★★★ Free Pass ★★★</string>
+
+    <!-- Messages -->
+    <string name="message_invalid_kana">That is not the romaji for any kana</string>
+    <string name="message_out_of_passes">You have no passes left!</string>
 </resources>

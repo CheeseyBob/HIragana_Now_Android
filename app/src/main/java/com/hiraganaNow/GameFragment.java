@@ -21,57 +21,37 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        refreshView();
         binding.buttonPass.setOnClickListener(this::onClickPassButton);
         binding.kanaInput.setOnEditorActionListener(this::onEditorAction);
-        binding.kanaInput.requestFocus();
-    }
-
-    private String getLivesText() {
-        return getCounterText('♥', Game.getLives());
-    }
-
-    private String getPassesText() {
-        return getCounterText('❓', Game.getPasses());
-    }
-
-    private String getCounterText(char symbol, int count) {
-        StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < count; i ++) {
-            sb.append('\n');
-            sb.append(symbol);
-        }
-        sb.deleteCharAt(0);
-        return sb.toString();
+        refreshView();
+        requestInputFocus(binding.kanaInput);
     }
 
     private void onClickPassButton(View view) {
-        System.out.println("onClickPassButton()");
-
         String romaji = Game.usePass();
-        binding.kanaInput.setText(romaji);
-        refreshView();
-
-
-        // TODO ...
-
+        if(romaji == null) {
+            showToast(R.string.message_out_of_passes);
+        } else {
+            binding.kanaInput.setText(romaji);
+            refreshPasses();
+        }
     }
 
     private boolean onEditorAction(TextView v, int actionId, KeyEvent event)  {
         String input = binding.kanaInput.getText().toString();
-        binding.kanaInput.setText("");
 
         switch (Game.test(input)) {
             case INVALID:
-                // TODO
+                showToast(R.string.message_invalid_kana);
                 break;
             case FAILURE:
                 // TODO
-                System.out.println("FAILURE: Game.currentKana.character="+Game.getLives());
+                refreshLives();
                 new FailureEffect(binding.textKana, requireContext())
                         .start(this::onEffectEnd);
                 break;
             case SUCCESS:
+                binding.kanaInput.setText("");
                 String nextKana = Game.getCurrentKana();
                 new SuccessEffect(nextKana, binding.textKana, requireContext())
                         .start(this::onEffectEnd);
@@ -88,6 +68,7 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
 
         // TODO ...
 
+        refreshView();
     }
 
     static class FailureEffect {
@@ -161,7 +142,18 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
 
     private void refreshView() {
         binding.textKana.setText(Game.getCurrentKana());
-        binding.textLives.setText(getLivesText());
-        binding.textPasses.setText(getPassesText());
+        refreshLives();
+        refreshPasses();
+    }
+
+    private void refreshLives() {
+        String text = Counters.getText(Game.getLives(), Game.MAX_LIVES, '♥', '❌');
+        binding.textLives.setText(text);
+    }
+
+    private void refreshPasses() {
+        String text = Counters.getText(Game.getPasses(), Game.MAX_PASSES, '❓', '❌');
+        binding.textPasses.setText(text);
+        binding.textFreePass.setVisibility(Game.isPassFree() ? View.VISIBLE : View.INVISIBLE);
     }
 }

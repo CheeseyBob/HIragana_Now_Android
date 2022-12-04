@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/Theme.HiraganaNow.FragmentLayout"
     tools:context=".GameFragment">
 
     <TextView
@@ -30,7 +31,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/text_kana"
-        tools:text="♥\n♥\n♥" />
+        tools:text="♥\n♥\n♥\n❌\n❌" />
 
     <TextView
         style="@style/Text.Game"
@@ -43,7 +44,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/text_kana"
         app:layout_constraintTop_toTopOf="@+id/text_kana"
-        tools:text="❓\n❓\n❓" />
+        tools:text="❓\n❓\n❌" />
 
     <Button
         style="@style/Button"
@@ -71,8 +72,9 @@
         tools:visibility="visible" />
 
     <EditText
-        android:id="@+id/kanaInput"
         style="@style/Text.Game.Input"
+        android:id="@+id/kanaInput"
+        android:hint="@string/hint_game_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -81,7 +83,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_kana"
-        tools:text="ka"
         android:importantForAutofill="no" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -22,8 +22,8 @@ public class Game {
     private static int newKanaToAdd = 0;
     private static boolean isThisTheFinalLevel = false;
 
-    private static final int STARTING_HP = 5;
-    private static final int STARTING_PASSES = 3;
+    public static final int MAX_LIVES = 5;
+    public static final int MAX_PASSES = 3;
     private static final int STARTING_NEW_KANA = 2;
 
     public static String getCurrentKana() {
@@ -46,6 +46,10 @@ public class Game {
         return progress;
     }
 
+    public static boolean isPassFree() {
+        return currentKana.isNewToPlayer;
+    }
+
     public static void reset(Mode mode) {
         Kana.load(mode);
         currentKanaList.clear();
@@ -53,8 +57,8 @@ public class Game {
         remainingKanaList.addAll(Kana.fullList);
         kanaLineupThisLevel.clear();
         failedKanaList.clear();
-        lives = STARTING_HP;
-        passes = STARTING_PASSES;
+        lives = MAX_LIVES;
+        passes = MAX_PASSES;
         freePassesUsed = 0;
         nonFreePassesUsed = 0;
         newKanaToAdd = STARTING_NEW_KANA;
@@ -92,8 +96,7 @@ public class Game {
      * the player is unable to use a pass.
      */
     public static String usePass() {
-        if(currentKana.isNewToPlayer) {
-            currentKana.isNewToPlayer = false;
+        if(isPassFree()) {
             freePassesUsed ++;
         } else if(passes > 0) {
             passes --;
@@ -102,6 +105,7 @@ public class Game {
             return null;
         }
 
+        currentKana.isNewToPlayer = false; // TODO - Replace this with a HashSet<Kana> of known kana.
         failedKanaList.add(currentKana);
 
         // Using a pass resets the final level marathon. //
@@ -113,10 +117,10 @@ public class Game {
 
     private static void levelUp() {
         // HP //
-        hpAtLevelUp = lives < STARTING_HP ? 1 : 0;
+        hpAtLevelUp = lives < MAX_LIVES ? 1 : 0;
 
         // Passes //
-        passesAtLevelUp = passes < STARTING_PASSES ? 1 : 0;
+        passesAtLevelUp = passes < MAX_PASSES ? 1 : 0;
 
         // New Kana //
         int unusedFreePasses = newKanaToAdd - freePassesUsed;

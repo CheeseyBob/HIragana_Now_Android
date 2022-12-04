@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.HiraganaNow" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
 
@@ -14,9 +14,6 @@
 
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>
-
-        <!-- Customize your theme here. -->
-        <item name="android:background">?attr/colorPrimaryVariant</item>
     </style>
 
     <style name="Theme.HiraganaNow.NoActionBar">
@@ -26,6 +23,10 @@
 
     <style name="Theme.HiraganaNow.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:background">?attr/colorPrimary</item>
+    </style>
+
+    <style name="Theme.HiraganaNow.FragmentLayout">
+        <item name="android:background">?attr/colorPrimaryVariant</item>
     </style>
 
     <style name="Button" parent="Widget.MaterialComponents.Button">
