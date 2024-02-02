@@ -14,6 +14,7 @@ public class Game {
     private static int lives = 0;
     private static int passes = 0;
     private static int progress = 0;
+    private static int maxProgressThisLevel = 0;
     private static int level = 0;
     private static int maxLevel = 0;
     private static int lifeIncreaseAtLevelUp = 0;
@@ -37,6 +38,14 @@ public class Game {
 
     public static int getLives() {
         return lives;
+    }
+
+    public static int getMaxLevel() {
+        return maxLevel;
+    }
+
+    public static int getMaxProgress() {
+        return maxProgressThisLevel;
     }
 
     public static int getPasses() {
@@ -210,6 +219,8 @@ public class Game {
                 }
             }
         }
+
+        maxProgressThisLevel = kanaLineupThisLevel.size();
     }
 
     private static void resetFinalLevel(){

@@ -34,6 +34,33 @@
         tools:text="♥\n♥\n♥\n❌\n❌" />
 
     <TextView
+        android:id="@+id/text_level"
+        style="@style/Text.Game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SmallSp"
+        tools:text="✴️✴️✴️✴️✴️✴️✴️✴️✴️✴️✴️🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒" />
+
+    <TextView
+        android:id="@+id/text_progress"
+        style="@style/Text.Game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textAlignment="center"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_level"
+        tools:ignore="SmallSp"
+        tools:text="🔶🔶🔶🔶🔶🔶🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸" />
+
+    <TextView
         style="@style/Text.Game"
         android:id="@+id/text_passes"
         android:layout_width="wrap_content"
@@ -47,16 +74,15 @@
         tools:text="❓\n❓\n❌" />
 
     <Button
-        style="@style/Button"
         android:id="@+id/button_pass"
+        style="@style/Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="@string/button_pass"
         app:layout_constraintBottom_toTopOf="@+id/text_kana"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_progress"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
@@ -76,7 +102,6 @@
         style="@style/Text.Game.Input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:ems="3"
         android:hint="@string/hint_game_input"
         android:importantForAutofill="no"

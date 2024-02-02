@@ -158,16 +158,32 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
         binding.textKana.setText(Game.getCurrentKana());
         refreshLives();
         refreshPasses();
+        refreshProgress();
+        refreshLevel();
     }
 
     private void refreshLives() {
-        String text = Counters.getText(Game.getLives(), Game.MAX_LIVES, '♥', '❌');
+        String text = Counters.getVerticalText(Game.getLives(), Game.MAX_LIVES, '♥', '❌');
         binding.textLives.setText(text);
     }
 
     private void refreshPasses() {
-        String text = Counters.getText(Game.getPasses(), Game.MAX_PASSES, '❓', '❌');
+        String text = Counters.getVerticalText(Game.getPasses(), Game.MAX_PASSES, '❓', '❌');
         binding.textPasses.setText(text);
         binding.textFreePass.setVisibility(Game.isPassFree() ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    private void refreshProgress() {
+        int count = Game.getProgress();
+        int max = Game.getMaxProgress();
+        String text = Counters.getHorizontalText(count, max, "🔶", "🔸");
+        binding.textProgress.setText(text);
+    }
+
+    private void refreshLevel() {
+        int count = Game.getLevel();
+        int max = Game.getMaxLevel();
+        String text = Counters.getHorizontalText(count, max, "✴️", "🔒");
+        binding.textLevel.setText(text);
     }
 }
