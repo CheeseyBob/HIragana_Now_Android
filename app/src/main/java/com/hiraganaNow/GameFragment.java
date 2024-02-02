@@ -56,8 +56,7 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
             }
         }
 
-        Game.TestResult result = Game.test(input);
-        switch (result) {
+        switch (Game.test(input)) {
             case INVALID:
                 showToast(R.string.message_invalid_kana);
                 break;
