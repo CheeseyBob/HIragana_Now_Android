@@ -21,11 +21,11 @@ public class MenuFragment extends BoundFragment<FragmentMenuBinding> {
 
     private void onClickHiraganaButton(View view) {
         Game.reset(Game.Mode.HIRAGANA);
-        navigate(R.id.nav_to_game);
+        navigate(R.id.nav_to_game_hiragana);
     }
 
     private void onClickKatakanaButton(View view) {
         Game.reset(Game.Mode.KATAKANA);
-        navigate(R.id.nav_to_game);
+        navigate(R.id.nav_to_game_katakana);
     }
 }

@@ -3,26 +3,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/MainMenu">
 
     <fragment
-        android:id="@+id/FirstFragment"
+        android:id="@+id/MainMenu"
         android:name="com.hiraganaNow.MenuFragment"
         android:label="@string/title_menu"
         tools:layout="@layout/fragment_menu">
 
         <action
-            android:id="@+id/nav_to_game"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/nav_to_game_hiragana"
+            app:destination="@id/HiraganaMode" />
+
+        <action
+            android:id="@+id/nav_to_game_katakana"
+            app:destination="@id/KatakanaMode" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
+        android:id="@+id/HiraganaMode"
         android:name="com.hiraganaNow.GameFragment"
         android:label="@string/title_game_hiragana"
         tools:layout="@layout/fragment_game">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            app:destination="@id/MainMenu" />
+    </fragment>
+    <fragment
+        android:id="@+id/KatakanaMode"
+        android:name="com.hiraganaNow.GameFragment"
+        android:label="@string/title_game_katakana"
+        tools:layout="@layout/fragment_game">
+
+        <action
+            android:id="@+id/action_SecondFragment_to_FirstFragment"
+            app:destination="@id/MainMenu" />
     </fragment>
 </navigation>
