@@ -6,6 +6,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -43,8 +45,19 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
             showToast(R.string.message_empty_input);
             return true;
         }
+        if(input.startsWith("cheat ")) {
+            try {
+                int skips = Integer.parseInt(input.substring(6));
+                Game.cheat(skips);
+                refreshView();
+                return true;
+            } catch (NumberFormatException e) {
+                // This is one of the rare cases where we actually want to do nothing in a catch.
+            }
+        }
 
-        switch (Game.test(input)) {
+        Game.TestResult result = Game.test(input);
+        switch (result) {
             case INVALID:
                 showToast(R.string.message_invalid_kana);
                 break;
@@ -52,13 +65,17 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
                 onTestFailure();
                 break;
             case SUCCESS:
-                new SuccessEffect(Game.getCurrentKana(), binding.textKana, requireContext())
+                new SuccessEffect(Game.getCurrentKana(), binding, requireContext())
                         .start(this::refreshView);
                 break;
             case LEVEL_UP:
                 String kana = Game.getCurrentKana();
-                new LevelUpEffect(kana, binding.textLevelUp, binding.textKana, requireContext())
+                new LevelUpEffect(kana, binding, requireContext())
                         .start(this::refreshView);
+                break;
+            case WIN_GAME:
+                new WinGameEffect(binding, requireContext())
+                        .start(this::onGameWin);
                 break;
             default:
                 throw new UnsupportedOperationException();
@@ -68,18 +85,21 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
         return true;
     }
 
-    private void onGameEnd() {
+    private void onGameOver() {
         Game.reset();
         refreshView();
     }
 
+    private void onGameWin() {
+        navigate(R.id.nav_to_main_menu);
+    }
+
     private void onTestFailure() {
         refreshLives();
-        System.out.println("onTestFailure(): Game.getLives()="+Game.getLives());
         if(Game.getLives() > 0) {
-            new FailureEffect(binding.textKana, requireContext()).start(this::refreshView);
+            new FailureEffect(binding, requireContext()).start(this::refreshView);
         } else {
-            showAlertDialog(R.string.message_game_over, this::onGameEnd);
+            showAlertDialog(R.string.message_game_over, this::onGameOver);
         }
     }
 
@@ -88,8 +108,8 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
         private final Context context;
         private Runnable onEffectEnd;
 
-        public FailureEffect(TextView view, Context context) {
-            this.view = view;
+        public FailureEffect(FragmentGameBinding binding, Context context) {
+            this.view = binding.textKana;
             this.context = context;
         }
 
@@ -121,9 +141,9 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
         private final TextView view;
         private Runnable onEffectEnd;
 
-        public SuccessEffect(String nextKana, TextView view, Context context) {
+        public SuccessEffect(String nextKana, FragmentGameBinding binding, Context context) {
             this.nextKana = nextKana;
-            this.view = view;
+            this.view = binding.textKana;
             this.context = context;
         }
 
@@ -156,10 +176,10 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
         private final TextView view;
         private final TextView kanaView;
 
-        public LevelUpEffect(String nextKana, TextView view, TextView kanaView, Context context) {
-            super(nextKana, kanaView, context);
-            this.view = view;
-            this.kanaView = kanaView;
+        public LevelUpEffect(String nextKana, FragmentGameBinding binding, Context context) {
+            super(nextKana, binding, context);
+            this.view = binding.textLevelUp;
+            this.kanaView = binding.textKana;
         }
 
         @Override
@@ -168,21 +188,72 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
 
             kanaView.setVisibility(View.INVISIBLE);
             view.setVisibility(View.VISIBLE);
+            view.setText(Game.isFinalLevel() ? R.string.text_final_level : R.string.text_level_up);
             view.startAnimation(animation);
             animation.setAnimationListener(new AnimationEndListener(this::startAnimation3));
         }
 
-        private void startAnimation3() {
+        protected void startAnimation3() {
             Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_out_right);
 
             view.startAnimation(animation);
             animation.setAnimationListener(new AnimationEndListener(this::startAnimation4));
         }
 
-        private void startAnimation4() {
+        protected void startAnimation4() {
             kanaView.setVisibility(View.VISIBLE);
             view.setVisibility(View.INVISIBLE);
             super.startAnimation2();
+        }
+    }
+
+    static class WinGameEffect extends SuccessEffect {
+        private final TextView view;
+        private final TextView kanaText;
+        private final TextView freePassText;
+        private final EditText input;
+        private final Button passButton;
+
+        public WinGameEffect(FragmentGameBinding binding, Context context) {
+            super(null, binding, context);
+            this.view = binding.textLevelUp;
+            this.kanaText = binding.textKana;
+            this.freePassText = binding.textFreePass;
+            this.input = binding.kanaInput;
+            this.passButton = binding.buttonPass;
+        }
+
+        @Override
+        public void start(Runnable onEffectEnd) {
+            input.setEnabled(false);
+            input.setVisibility(View.INVISIBLE);
+            passButton.setEnabled(false);
+            passButton.setVisibility(View.INVISIBLE);
+            freePassText.setVisibility(View.INVISIBLE);
+            super.start(onEffectEnd);
+        }
+
+        @Override
+        protected void startAnimation2() {
+            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
+
+            kanaText.setVisibility(View.INVISIBLE);
+            view.setText(R.string.text_win_game);
+            view.setVisibility(View.VISIBLE);
+            view.startAnimation(animation);
+            animation.setAnimationListener(new AnimationEndListener(this::startAnimation3));
+        }
+
+        protected void startAnimation3() {
+            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.fade_out);
+            view.startAnimation(animation);
+            animation.setAnimationListener(new AnimationEndListener(this::startAnimation4));
+        }
+
+        protected void startAnimation4() {
+            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
+            view.startAnimation(animation);
+            animation.setAnimationListener(new AnimationEndListener(this::startAnimation3));
         }
     }
 

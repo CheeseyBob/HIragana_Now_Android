@@ -20,6 +20,7 @@ public class Game {
     private static int nonFreePassesUsed = 0;
     private static int newKanaToAdd = 0;
     private static boolean isThisTheFinalLevel = false;
+    private static boolean isGameWon = false;
 
     public static final int MAX_LIVES = 5;
     public static final int MAX_PASSES = 3;
@@ -57,6 +58,14 @@ public class Game {
         return currentKana.isNewToPlayer;
     }
 
+    public static boolean isFinalLevel() {
+        return isThisTheFinalLevel;
+    }
+
+    public static boolean isGameWon() {
+        return isGameWon;
+    }
+
     public static boolean isStartOfLevel() {
         return progress == 1;
     }
@@ -82,6 +91,7 @@ public class Game {
         level = 1;
         maxLevel = Kana.fullList.size();
         isThisTheFinalLevel = false;
+        isGameWon = false;
         nextLevel();
         nextCharacter();
     }
@@ -94,7 +104,8 @@ public class Game {
         if(input.equals(currentKana.romaji)) {
             currentKana.isNewToPlayer = false;
             nextCharacter();
-            return isStartOfLevel() ? TestResult.LEVEL_UP : TestResult.SUCCESS;
+            return isGameWon() ? TestResult.WIN_GAME :
+                    isStartOfLevel() ? TestResult.LEVEL_UP : TestResult.SUCCESS;
         } else {
             lives--;
             failedKanaList.add(currentKana);
@@ -131,6 +142,11 @@ public class Game {
         return currentKana.romaji;
     }
 
+    public static void cheat(int skips) {
+        for(int i = 0; i < skips; i ++)
+            test(currentKana.romaji);
+    }
+
     private static void levelUp() {
         // HP //
         int lifeIncreaseAtLevelUp = lives < MAX_LIVES ? 1 : 0;
@@ -146,8 +162,7 @@ public class Game {
         progress = 0;
 
         if(isThisTheFinalLevel){
-            // TODO ...
-            //new GameWinEffect();
+            isGameWon = true;
         } else {
 			nextLevel();
             if(lifeIncreaseAtLevelUp > 0){
@@ -220,6 +235,6 @@ public class Game {
     }
 
     public enum TestResult {
-        INVALID, FAILURE, SUCCESS, LEVEL_UP
+        INVALID, FAILURE, SUCCESS, LEVEL_UP, WIN_GAME
     }
 }

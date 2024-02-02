@@ -24,6 +24,8 @@
     <string name="text_katakana">カ\nタ\nカ\nナ</string>
     <string name="text_free_pass">★★★ Free Pass ★★★</string>
     <string name="text_level_up">★★★★★\nLevel Up\n★★★★★</string>
+    <string name="text_final_level">★★★★★\nFinal Test\n★★★★★</string>
+    <string name="text_win_game">★★★★★\nYou Did It!\n★★★★★</string>
 
     <!-- Messages -->
     <string name="message_empty_input">Type an answer or press the "pass" button</string>
