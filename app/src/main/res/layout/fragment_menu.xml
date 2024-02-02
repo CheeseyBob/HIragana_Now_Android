@@ -37,8 +37,8 @@
         tools:ignore="TextContrastCheck" />
 
     <Button
-        style="@style/Button"
         android:id="@+id/button_hiragana"
+        style="@style/Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_hiragana"
@@ -48,25 +48,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        style="@style/Button"
         android:id="@+id/button_katakana"
+        style="@style/Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_katakana"
-        app:layout_constraintBottom_toTopOf="@id/button_info"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_hiragana" />
-
-    <Button
-        style="@style/Button"
-        android:id="@+id/button_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_info"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_katakana" />
+        app:layout_constraintTop_toBottomOf="@id/button_hiragana" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
