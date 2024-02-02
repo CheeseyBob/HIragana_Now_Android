@@ -43,17 +43,13 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
             showToast(R.string.message_empty_input);
             return true;
         }
-        binding.kanaInput.setText("");
 
         switch (Game.test(input)) {
             case INVALID:
                 showToast(R.string.message_invalid_kana);
                 break;
             case FAILURE:
-                // TODO
-                refreshLives();
-                new FailureEffect(binding.textKana, requireContext())
-                        .start(this::onEffectEnd);
+                onTestFailure();
                 break;
             case SUCCESS:
                 String nextKana = Game.getCurrentKana();
@@ -62,8 +58,7 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
                 break;
         }
 
-        // TODO ...
-
+        binding.kanaInput.setText("");
         return true;
     }
 
@@ -73,6 +68,21 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
         // TODO ...
 
         refreshView();
+    }
+
+    private void onGameEnd() {
+        Game.reset();
+        refreshView();
+    }
+
+    private void onTestFailure() {
+        refreshLives();
+        System.out.println("onTestFailure(): Game.getLives()="+Game.getLives());
+        if(Game.getLives() > 0) {
+            new FailureEffect(binding.textKana, requireContext()).start(this::onEffectEnd);
+        } else {
+            showAlertDialog(R.string.message_game_over, this::onGameEnd);
+        }
     }
 
     static class FailureEffect {

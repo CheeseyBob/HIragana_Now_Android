@@ -1,5 +1,6 @@
 package com.hiraganaNow;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -44,6 +45,14 @@ public class BoundFragment<B extends ViewBinding> extends Fragment {
         view.requestFocus();
         InputMethodManager imm = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    public void showAlertDialog(int stringResourceId, Runnable callback) {
+        new AlertDialog.Builder(requireContext())
+                .setMessage(stringResourceId)
+                .setOnDismissListener((dialog) -> callback.run())
+                .create()
+                .show();
     }
 
     public void showToast(int stringResourceId) {

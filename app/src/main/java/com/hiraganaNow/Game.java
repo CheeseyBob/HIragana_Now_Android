@@ -9,13 +9,14 @@ public class Game {
     private final static LinkedList<Kana> kanaLineupThisLevel = new LinkedList<>();
     private final static LinkedList<Kana> failedKanaList = new LinkedList<>();
 
+    private static Mode mode = null;
     private static Kana currentKana = null;
     private static int lives = 0;
     private static int passes = 0;
     private static int progress = 0;
     private static int level = 0;
     private static int maxLevel = 0;
-    private static int hpAtLevelUp = 0;
+    private static int lifeIncreaseAtLevelUp = 0;
     private static int passesAtLevelUp = 0;
     private static int freePassesUsed = 0;
     private static int nonFreePassesUsed = 0;
@@ -50,7 +51,12 @@ public class Game {
         return currentKana.isNewToPlayer;
     }
 
+    public static void reset() {
+        reset(Game.mode);
+    }
+
     public static void reset(Mode mode) {
+        Game.mode = mode;
         Kana.load(mode);
         currentKanaList.clear();
         remainingKanaList.clear();
@@ -117,7 +123,7 @@ public class Game {
 
     private static void levelUp() {
         // HP //
-        hpAtLevelUp = lives < MAX_LIVES ? 1 : 0;
+        lifeIncreaseAtLevelUp = lives < MAX_LIVES ? 1 : 0;
 
         // Passes //
         passesAtLevelUp = passes < MAX_PASSES ? 1 : 0;
@@ -129,13 +135,21 @@ public class Game {
         nonFreePassesUsed = 0;
         progress = 0;
 
-        /* TODO ...
         if(isThisTheFinalLevel){
-            new GameWinEffect();
+            // TODO ...
+            //new GameWinEffect();
         } else {
-            new LevelUpEffect();
+			nextLevel();
+            if(lifeIncreaseAtLevelUp > 0){
+                lives += lifeIncreaseAtLevelUp;
+                lifeIncreaseAtLevelUp = 0;
+            }
+            if(passesAtLevelUp > 0){
+                passes += passesAtLevelUp;
+                passesAtLevelUp = 0;
+            }
+            nextCharacter();
         }
-        */
     }
 
     private static void nextCharacter() {
@@ -150,7 +164,7 @@ public class Game {
     private static void nextLevel() {
         for(int i = 0; i < newKanaToAdd; i ++){
             if(!remainingKanaList.isEmpty()){
-                currentKanaList.add(removeRandom(remainingKanaList));
+                currentKanaList.add(ListUtils.removeRandom(remainingKanaList));
             } else {
                 isThisTheFinalLevel = true;
                 break;
@@ -163,13 +177,13 @@ public class Game {
         } else {
             // Add a copies of each hiragana to the lineup in a random order, twice. //
             for(int i = 0; i < 2; i ++){
-                shuffle(currentKanaList);
+                ListUtils.shuffle(currentKanaList);
                 kanaLineupThisLevel.addAll(currentKanaList);
             }
 
             // Add extra copies of hiragana that the player failed previously. //
             while(!failedKanaList.isEmpty()){
-                Kana extraHira = removeRandom(failedKanaList);
+                Kana extraHira = ListUtils.removeRandom(failedKanaList);
                 int index = (int)(Math.random()*kanaLineupThisLevel.size());
                 kanaLineupThisLevel.add(index, extraHira);
             }
@@ -201,21 +215,9 @@ public class Game {
     private static void resetFinalLevel(){
         // One copy of each hiragana goes in the lineup, in a random order. //
         kanaLineupThisLevel.clear();
-        shuffle(currentKanaList);
+        ListUtils.shuffle(currentKanaList);
         kanaLineupThisLevel.addAll(currentKanaList);
         progress = 0;
-    }
-
-    private static <X> X removeRandom(LinkedList<X> list){
-        return list.remove((int)(Math.random()*list.size()));
-    }
-
-    private static <X> void shuffle(LinkedList<X> listToShuffle){
-        LinkedList<X> shuffledList = new LinkedList<>();
-        while(!listToShuffle.isEmpty()){
-            shuffledList.add(removeRandom(listToShuffle));
-        }
-        listToShuffle.addAll(shuffledList);
     }
 
     public enum Mode {
