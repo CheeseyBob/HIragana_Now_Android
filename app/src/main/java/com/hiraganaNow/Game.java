@@ -1,7 +1,6 @@
 package com.hiraganaNow;
 
 import java.util.LinkedList;
-import java.util.ListIterator;
 
 public class Game {
     private final static LinkedList<Kana> currentKanaList = new LinkedList<>();
@@ -17,8 +16,6 @@ public class Game {
     private static int maxProgressThisLevel = 0;
     private static int level = 0;
     private static int maxLevel = 0;
-    private static int lifeIncreaseAtLevelUp = 0;
-    private static int passesAtLevelUp = 0;
     private static int freePassesUsed = 0;
     private static int nonFreePassesUsed = 0;
     private static int newKanaToAdd = 0;
@@ -94,7 +91,11 @@ public class Game {
             return TestResult.INVALID;
 
         // Check whether the input is correct. //
-        if(!input.equals(currentKana.romaji)) {
+        if(input.equals(currentKana.romaji)) {
+            currentKana.isNewToPlayer = false;
+            nextCharacter();
+            return isStartOfLevel() ? TestResult.LEVEL_UP : TestResult.SUCCESS;
+        } else {
             lives--;
             failedKanaList.add(currentKana);
 
@@ -104,10 +105,6 @@ public class Game {
 
             return TestResult.FAILURE;
         }
-
-        currentKana.isNewToPlayer = false;
-        nextCharacter();
-        return isStartOfLevel() ? TestResult.LEVEL_UP : TestResult.SUCCESS;
     }
 
     /**
@@ -124,7 +121,7 @@ public class Game {
             return null;
         }
 
-        currentKana.isNewToPlayer = false; // TODO - Replace this with a HashSet<Kana> of known kana.
+        currentKana.isNewToPlayer = false;
         failedKanaList.add(currentKana);
 
         // Using a pass resets the final level marathon. //
@@ -136,10 +133,10 @@ public class Game {
 
     private static void levelUp() {
         // HP //
-        lifeIncreaseAtLevelUp = lives < MAX_LIVES ? 1 : 0;
+        int lifeIncreaseAtLevelUp = lives < MAX_LIVES ? 1 : 0;
 
         // Passes //
-        passesAtLevelUp = passes < MAX_PASSES ? 1 : 0;
+        int passesAtLevelUp = passes < MAX_PASSES ? 1 : 0;
 
         // New Kana //
         int unusedFreePasses = newKanaToAdd - freePassesUsed;
@@ -155,11 +152,9 @@ public class Game {
 			nextLevel();
             if(lifeIncreaseAtLevelUp > 0){
                 lives += lifeIncreaseAtLevelUp;
-                lifeIncreaseAtLevelUp = 0;
             }
             if(passesAtLevelUp > 0){
                 passes += passesAtLevelUp;
-                passesAtLevelUp = 0;
             }
             nextCharacter();
         }
@@ -188,39 +183,24 @@ public class Game {
         if(isThisTheFinalLevel){
             resetFinalLevel();
         } else {
-            // Add a copies of each hiragana to the lineup in a random order, twice. //
-            for(int i = 0; i < 2; i ++){
-                ListUtils.shuffle(currentKanaList);
-                kanaLineupThisLevel.addAll(currentKanaList);
-            }
+            // Add two copies of each kana to the lineup. //
+            kanaLineupThisLevel.addAll(currentKanaList);
+            kanaLineupThisLevel.addAll(currentKanaList);
 
-            // Add extra copies of hiragana that the player failed previously. //
-            while(!failedKanaList.isEmpty()){
-                Kana extraHira = ListUtils.removeRandom(failedKanaList);
-                int index = (int)(Math.random()*kanaLineupThisLevel.size());
-                kanaLineupThisLevel.add(index, extraHira);
-            }
+            // Add extra copies of kana that the player failed previously. //
+            kanaLineupThisLevel.addAll(failedKanaList);
+            failedKanaList.clear();
 
-            // Swap out any doubles. //
-            ListIterator<Kana> li = kanaLineupThisLevel.listIterator();
-            while(li.hasNext()){
-                Kana h1 = li.next();
-                if(!li.hasNext()){
+            // Shuffle the lineup. //
+            ListUtils.shuffle(kanaLineupThisLevel);
+
+            // Attempt to remove consecutive duplicates. //
+            for(int i = 0; i < 5; i ++) {
+                LinkedList<Kana> dupes = ListUtils.removeConsecutiveDuplicates(kanaLineupThisLevel);
+                if(dupes.isEmpty())
                     break;
-                }
-                Kana h2 = li.next();
-                // If h1 and h2 are the same, we swap h2 with its successor, if possible. //
-                if(h1.equals(h2) && li.hasNext()){
-                    // Remove h2 from the list. //
-                    li.remove();
-                    // Move cursor to the right of h2's successor (now h1's successor). //
-                    li.next();
-                    // Add h2 back in to the list. //
-                    li.add(h2);
-                } else {
-                    // Move back a step so we can continue by checking h2 and h2.next. //
-                    li.previous();
-                }
+                while(!dupes.isEmpty())
+                    ListUtils.addRandom(kanaLineupThisLevel, dupes.remove());
             }
         }
 

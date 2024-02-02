@@ -38,7 +38,7 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
     }
 
     private boolean onEditorAction(TextView v, int actionId, KeyEvent event)  {
-        String input = binding.kanaInput.getText().toString();
+        String input = binding.kanaInput.getText().toString().toLowerCase();
         if(input.equals("")) {
             showToast(R.string.message_empty_input);
             return true;

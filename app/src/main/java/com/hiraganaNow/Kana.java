@@ -8,11 +8,11 @@ public class Kana {
 
     final String character;
     final String romaji;
-    boolean isNewToPlayer = true; // TODO - Replace this with a HashSet<Kana> of known kana in Game class.
+    boolean isNewToPlayer = true;
 
     static boolean isValidRomaji(String romaji){
-        for(Kana hiragana : fullList){
-            if(hiragana.romaji.equals(romaji)){
+        for(Kana kana : fullList){
+            if(kana.romaji.equals(romaji)){
                 return true;
             }
         }
@@ -30,6 +30,18 @@ public class Kana {
             default:
                 throw new IllegalArgumentException();
         }
+    }
+
+    private static void loadCharacterData(String[] data){
+        fullList = new ArrayList<>();
+        for(int i = 0; i < data.length; i += 2){
+            fullList.add(new Kana(data[i], data[i+1]));
+        }
+    }
+
+    public Kana(String romaji, String hiragana) {
+        this.character = hiragana;
+        this.romaji = romaji;
     }
 
     static void loadHiragana(){
@@ -182,17 +194,5 @@ public class Kana {
                 "wo:ヲ:"+
                 "n:ン:";
         loadCharacterData(dataString.split(":"));
-    }
-
-    private static void loadCharacterData(String[] data){
-        fullList = new ArrayList<>();
-        for(int i = 0; i < data.length; i += 2){
-            fullList.add(new Kana(data[i], data[i+1]));
-        }
-    }
-
-    public Kana(String romaji, String hiragana) {
-        this.character = hiragana;
-        this.romaji = romaji;
     }
 }
