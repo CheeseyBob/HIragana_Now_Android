@@ -23,6 +23,7 @@
     <string name="text_hiragana">ひ\nら\nが\nな</string>
     <string name="text_katakana">カ\nタ\nカ\nナ</string>
     <string name="text_free_pass">★★★ Free Pass ★★★</string>
+    <string name="text_level_up">★★★★★\nLevel Up\n★★★★★</string>
 
     <!-- Messages -->
     <string name="message_empty_input">Type an answer or press the "pass" button</string>

@@ -60,6 +60,10 @@ public class Game {
         return currentKana.isNewToPlayer;
     }
 
+    public static boolean isStartOfLevel() {
+        return progress == 1;
+    }
+
     public static void reset() {
         reset(Game.mode);
     }
@@ -90,11 +94,7 @@ public class Game {
             return TestResult.INVALID;
 
         // Check whether the input is correct. //
-        if(input.equals(currentKana.romaji)) {
-            currentKana.isNewToPlayer = false;
-            nextCharacter();
-            return TestResult.SUCCESS;
-        } else {
+        if(!input.equals(currentKana.romaji)) {
             lives--;
             failedKanaList.add(currentKana);
 
@@ -104,6 +104,10 @@ public class Game {
 
             return TestResult.FAILURE;
         }
+
+        currentKana.isNewToPlayer = false;
+        nextCharacter();
+        return isStartOfLevel() ? TestResult.LEVEL_UP : TestResult.SUCCESS;
     }
 
     /**
@@ -236,6 +240,6 @@ public class Game {
     }
 
     public enum TestResult {
-        INVALID, FAILURE, SUCCESS
+        INVALID, FAILURE, SUCCESS, LEVEL_UP
     }
 }

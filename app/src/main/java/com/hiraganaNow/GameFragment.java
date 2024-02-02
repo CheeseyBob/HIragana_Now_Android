@@ -52,22 +52,20 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
                 onTestFailure();
                 break;
             case SUCCESS:
-                String nextKana = Game.getCurrentKana();
-                new SuccessEffect(nextKana, binding.textKana, requireContext())
-                        .start(this::onEffectEnd);
+                new SuccessEffect(Game.getCurrentKana(), binding.textKana, requireContext())
+                        .start(this::refreshView);
                 break;
+            case LEVEL_UP:
+                String kana = Game.getCurrentKana();
+                new LevelUpEffect(kana, binding.textLevelUp, binding.textKana, requireContext())
+                        .start(this::refreshView);
+                break;
+            default:
+                throw new UnsupportedOperationException();
         }
 
         binding.kanaInput.setText("");
         return true;
-    }
-
-    private void onEffectEnd() {
-        System.out.println("onEffectEnd(): Game.currentKana.character="+Game.getCurrentKana());
-
-        // TODO ...
-
-        refreshView();
     }
 
     private void onGameEnd() {
@@ -79,7 +77,7 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
         refreshLives();
         System.out.println("onTestFailure(): Game.getLives()="+Game.getLives());
         if(Game.getLives() > 0) {
-            new FailureEffect(binding.textKana, requireContext()).start(this::onEffectEnd);
+            new FailureEffect(binding.textKana, requireContext()).start(this::refreshView);
         } else {
             showAlertDialog(R.string.message_game_over, this::onGameEnd);
         }
@@ -118,9 +116,9 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
     }
 
     static class SuccessEffect {
+        protected final Context context;
         private final String nextKana;
         private final TextView view;
-        private final Context context;
         private Runnable onEffectEnd;
 
         public SuccessEffect(String nextKana, TextView view, Context context) {
@@ -134,7 +132,7 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
             startAnimation1();
         }
 
-        private void startAnimation1() {
+        protected void startAnimation1() {
             int textColor = ContextCompat.getColor(context, R.color.green_10);
             Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.fade_out);
 
@@ -143,7 +141,7 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
             animation.setAnimationListener(new AnimationEndListener(this::startAnimation2));
         }
 
-        private void startAnimation2() {
+        protected void startAnimation2() {
             int textColor = ContextCompat.getColor(context, R.color.white);
             Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
 
@@ -151,6 +149,40 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
             view.setTextColor(textColor);
             view.startAnimation(animation);
             animation.setAnimationListener(new AnimationEndListener(onEffectEnd));
+        }
+    }
+
+    static class LevelUpEffect extends SuccessEffect {
+        private final TextView view;
+        private final TextView kanaView;
+
+        public LevelUpEffect(String nextKana, TextView view, TextView kanaView, Context context) {
+            super(nextKana, kanaView, context);
+            this.view = view;
+            this.kanaView = kanaView;
+        }
+
+        @Override
+        protected void startAnimation2() {
+            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
+
+            kanaView.setVisibility(View.INVISIBLE);
+            view.setVisibility(View.VISIBLE);
+            view.startAnimation(animation);
+            animation.setAnimationListener(new AnimationEndListener(this::startAnimation3));
+        }
+
+        private void startAnimation3() {
+            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_out_right);
+
+            view.startAnimation(animation);
+            animation.setAnimationListener(new AnimationEndListener(this::startAnimation4));
+        }
+
+        private void startAnimation4() {
+            kanaView.setVisibility(View.VISIBLE);
+            view.setVisibility(View.INVISIBLE);
+            super.startAnimation2();
         }
     }
 
