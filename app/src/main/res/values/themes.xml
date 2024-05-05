@@ -65,4 +65,9 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="Text.TitleScreenVersionText">
+        <item name="android:fontFamily">serif</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
+
 </resources>

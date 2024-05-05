@@ -17,6 +17,7 @@ public class MenuFragment extends BoundFragment<FragmentMenuBinding> {
         super.onViewCreated(view, savedInstanceState);
         binding.buttonHiragana.setOnClickListener(this::onClickHiraganaButton);
         binding.buttonKatakana.setOnClickListener(this::onClickKatakanaButton);
+        binding.textVersion.setText(Version.getVersionString());
     }
 
     private void onClickHiraganaButton(View view) {
