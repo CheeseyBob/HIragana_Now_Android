@@ -34,8 +34,8 @@
         tools:text="♥\n♥\n♥\n❌\n❌" />
 
     <TextView
-        android:id="@+id/text_level"
         style="@style/Text.Game"
+        android:id="@+id/text_level"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAlignment="center"
@@ -47,8 +47,8 @@
         tools:text="✴️✴️✴️✴️✴️✴️✴️✴️✴️✴️✴️🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒" />
 
     <TextView
-        android:id="@+id/text_progress"
         style="@style/Text.Game"
+        android:id="@+id/text_power"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -57,6 +57,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_level"
+        tools:ignore="SmallSp"
+        tools:text="💪💪💪💪💪" />
+
+    <TextView
+        style="@style/Text.Game"
+        android:id="@+id/text_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textAlignment="center"
+        android:textSize="9sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_power"
         tools:ignore="SmallSp"
         tools:text="🔶🔶🔶🔶🔶🔶🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸" />
 
@@ -74,8 +88,8 @@
         tools:text="❓\n❓\n❌" />
 
     <Button
-        android:id="@+id/button_pass"
         style="@style/Button"
+        android:id="@+id/button_pass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_pass"
@@ -98,8 +112,8 @@
         tools:visibility="visible" />
 
     <EditText
-        android:id="@+id/kanaInput"
         style="@style/Text.Game.Input"
+        android:id="@+id/kanaInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="3"
@@ -112,8 +126,8 @@
         app:layout_constraintTop_toBottomOf="@+id/text_kana" />
 
     <TextView
-        android:id="@+id/text_level_up"
         style="@style/Text.Game"
+        android:id="@+id/text_level_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/text_level_up"

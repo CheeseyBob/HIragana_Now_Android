@@ -12,6 +12,13 @@ public class Counters {
         return sb.toString();
     }
 
+    public static String getHorizontalTextNoMax(int count, String counter) {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < count; i ++)
+            sb.append(counter);
+        return sb.toString();
+    }
+
     public static String getVerticalText(int count, int max, char counter, char missing) {
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i < max; i ++) {

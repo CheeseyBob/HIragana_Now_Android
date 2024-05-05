@@ -3,10 +3,15 @@ package com.hiraganaNow;
 import java.util.LinkedList;
 
 public class Game {
-    private final static LinkedList<Kana> currentKanaList = new LinkedList<>();
-    private final static LinkedList<Kana> remainingKanaList = new LinkedList<>();
-    private final static LinkedList<Kana> kanaLineupThisLevel = new LinkedList<>();
-    private final static LinkedList<Kana> failedKanaList = new LinkedList<>();
+    private static final LinkedList<Kana> currentKanaList = new LinkedList<>();
+    private static final LinkedList<Kana> remainingKanaList = new LinkedList<>();
+    private static final LinkedList<Kana> kanaLineupThisLevel = new LinkedList<>();
+    private static final LinkedList<Kana> failedKanaList = new LinkedList<>();
+
+    private static final int MAX_LIVES = 5;
+    private static final int MAX_PASSES = 3;
+    private static final int MIN_POWER_LEVEL = 1;
+    private static final int STARTING_POWER_LEVEL = 3;
 
     private static Mode mode = null;
     private static Kana currentKana = null;
@@ -16,15 +21,9 @@ public class Game {
     private static int maxProgressThisLevel = 0;
     private static int level = 0;
     private static int maxLevel = 0;
-    private static int freePassesUsed = 0;
-    private static int nonFreePassesUsed = 0;
-    private static int newKanaToAdd = 0;
+    private static int powerLevel = 0;
     private static boolean isThisTheFinalLevel = false;
     private static boolean isGameWon = false;
-
-    public static final int MAX_LIVES = 5;
-    public static final int MAX_PASSES = 3;
-    private static final int STARTING_NEW_KANA = 2;
 
     public static String getCurrentKana() {
         return currentKana.character;
@@ -34,24 +33,36 @@ public class Game {
         return level;
     }
 
+    public static int getLevelMax() {
+        return maxLevel;
+    }
+
     public static int getLives() {
         return lives;
     }
 
-    public static int getMaxLevel() {
-        return maxLevel;
-    }
-
-    public static int getMaxProgress() {
-        return maxProgressThisLevel;
+    public static int getLivesMax() {
+        return MAX_LIVES;
     }
 
     public static int getPasses() {
         return passes;
     }
 
+    public static int getPassesMax() {
+        return MAX_PASSES;
+    }
+
+    public static int getPowerLevel() {
+        return powerLevel;
+    }
+
     public static int getProgress() {
         return progress;
+    }
+
+    public static int getProgressMax() {
+        return maxProgressThisLevel;
     }
 
     public static boolean isPassFree() {
@@ -84,9 +95,7 @@ public class Game {
         failedKanaList.clear();
         lives = MAX_LIVES;
         passes = MAX_PASSES;
-        freePassesUsed = 0;
-        nonFreePassesUsed = 0;
-        newKanaToAdd = STARTING_NEW_KANA;
+        powerLevel = STARTING_POWER_LEVEL;
         progress = 0;
         level = 1;
         maxLevel = Kana.fullList.size();
@@ -97,6 +106,10 @@ public class Game {
     }
 
     public static TestResult test(String input) {
+        if(isPassFree()) {
+            powerLevel ++;
+        }
+
         if(!Kana.isValidRomaji(input))
             return TestResult.INVALID;
 
@@ -123,12 +136,10 @@ public class Game {
      * the player is unable to use a pass.
      */
     public static String usePass() {
-        if(isPassFree()) {
-            freePassesUsed ++;
-        } else if(passes > 0) {
+        if(passes > 0 && !isPassFree()) {
             passes --;
-            nonFreePassesUsed ++;
-        } else {
+            reducePowerLevel();
+        } else if(!isPassFree()) {
             return null;
         }
 
@@ -148,18 +159,18 @@ public class Game {
     }
 
     private static void levelUp() {
+        progress = 0;
+
         // HP //
         int lifeIncreaseAtLevelUp = lives < MAX_LIVES ? 1 : 0;
 
         // Passes //
         int passesAtLevelUp = passes < MAX_PASSES ? 1 : 0;
 
-        // New Kana //
-        int unusedFreePasses = newKanaToAdd - freePassesUsed;
-        newKanaToAdd = Math.max(2, newKanaToAdd + 1 - nonFreePassesUsed + unusedFreePasses);
-        freePassesUsed = 0;
-        nonFreePassesUsed = 0;
-        progress = 0;
+        // Power Level //
+        powerLevel += 1;
+        powerLevel += lives == MAX_LIVES ? 1 : 0;
+        powerLevel += passes == MAX_PASSES ? 1 : 0;
 
         if(isThisTheFinalLevel){
             isGameWon = true;
@@ -185,7 +196,7 @@ public class Game {
     }
 
     private static void nextLevel() {
-        for(int i = 0; i < newKanaToAdd; i ++){
+        for(int i = 0; i < powerLevel; i ++){
             if(!remainingKanaList.isEmpty()){
                 currentKanaList.add(ListUtils.removeRandom(remainingKanaList));
             } else {
@@ -222,7 +233,11 @@ public class Game {
         maxProgressThisLevel = kanaLineupThisLevel.size();
     }
 
-    private static void resetFinalLevel(){
+    private static void reducePowerLevel() {
+        powerLevel = Math.max(MIN_POWER_LEVEL, powerLevel - 1);
+    }
+
+    private static void resetFinalLevel() {
         // One copy of each hiragana goes in the lineup, in a random order. //
         kanaLineupThisLevel.clear();
         ListUtils.shuffle(currentKanaList);

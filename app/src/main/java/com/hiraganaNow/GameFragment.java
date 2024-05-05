@@ -35,7 +35,7 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
             showToast(R.string.message_out_of_passes);
         } else {
             binding.kanaInput.setText(romaji);
-            refreshPasses();
+            refreshView();
         }
     }
 
@@ -262,30 +262,37 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
         refreshPasses();
         refreshProgress();
         refreshLevel();
+        refreshPowerLevel();
     }
 
     private void refreshLives() {
-        String text = Counters.getVerticalText(Game.getLives(), Game.MAX_LIVES, '♥', '❌');
+        String text = Counters.getVerticalText(Game.getLives(), Game.getLivesMax(), '♥', '❌');
         binding.textLives.setText(text);
     }
 
     private void refreshPasses() {
-        String text = Counters.getVerticalText(Game.getPasses(), Game.MAX_PASSES, '❓', '❌');
+        String text = Counters.getVerticalText(Game.getPasses(), Game.getPassesMax(), '❓', '❌');
         binding.textPasses.setText(text);
         binding.textFreePass.setVisibility(Game.isPassFree() ? View.VISIBLE : View.INVISIBLE);
     }
 
     private void refreshProgress() {
         int count = Game.getProgress();
-        int max = Game.getMaxProgress();
+        int max = Game.getProgressMax();
         String text = Counters.getHorizontalText(count, max, "🔶", "🔸");
         binding.textProgress.setText(text);
     }
 
     private void refreshLevel() {
         int count = Game.getLevel();
-        int max = Game.getMaxLevel();
+        int max = Game.getLevelMax();
         String text = Counters.getHorizontalText(count, max, "✴️", "🔒");
         binding.textLevel.setText(text);
+    }
+
+    private void refreshPowerLevel() {
+        int count = Game.getPowerLevel();
+        String text = Counters.getHorizontalTextNoMax(count, "💪");
+        binding.textPower.setText(text);
     }
 }
