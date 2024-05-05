@@ -106,21 +106,21 @@ public class Game {
     }
 
     public static TestResult test(String input) {
-        if(isPassFree()) {
-            powerLevel ++;
-        }
-
         if(!Kana.isValidRomaji(input))
             return TestResult.INVALID;
 
         // Check whether the input is correct. //
         if(input.equals(currentKana.romaji)) {
+            if(isPassFree()) {
+                powerLevel ++;
+            }
             currentKana.isNewToPlayer = false;
             nextCharacter();
             return isGameWon() ? TestResult.WIN_GAME :
                     isStartOfLevel() ? TestResult.LEVEL_UP : TestResult.SUCCESS;
         } else {
             lives--;
+            reducePowerLevel();
             failedKanaList.add(currentKana);
 
             // Failure resets the final level marathon. //
@@ -196,21 +196,25 @@ public class Game {
     }
 
     private static void nextLevel() {
-        for(int i = 0; i < powerLevel; i ++){
-            if(!remainingKanaList.isEmpty()){
-                currentKanaList.add(ListUtils.removeRandom(remainingKanaList));
-            } else {
-                isThisTheFinalLevel = true;
-                break;
-            }
-        }
-        level = currentKanaList.size();
-
-        if(isThisTheFinalLevel){
+        if(remainingKanaList.size() <= powerLevel) {
+            isThisTheFinalLevel = true;
+            currentKanaList.addAll(remainingKanaList);
+            remainingKanaList.clear();
             resetFinalLevel();
         } else {
-            // Add two copies of each kana to the lineup. //
-            kanaLineupThisLevel.addAll(currentKanaList);
+            // Randomly choose new kana to add this level. //
+            LinkedList<Kana> newKana = new LinkedList<>();
+            for(int i = 0; i < powerLevel; i ++) {
+                Kana kana = ListUtils.removeRandom(remainingKanaList);
+                newKana.add(kana);
+            }
+            currentKanaList.addAll(newKana);
+
+            // Add three copies of each new kana to the lineup. //
+            kanaLineupThisLevel.addAll(newKana);
+            kanaLineupThisLevel.addAll(newKana);
+
+            // Add one copy of each kana from the previous level. //
             kanaLineupThisLevel.addAll(currentKanaList);
 
             // Add extra copies of kana that the player failed previously. //
@@ -230,6 +234,7 @@ public class Game {
             }
         }
 
+        level = currentKanaList.size();
         maxProgressThisLevel = kanaLineupThisLevel.size();
     }
 
