@@ -60,18 +60,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_progress" />
 
-    <!-- Note that the big kana text size will be adjusted at runtime. -->
-    <TextView
-        style="@style/Text.Game.BigKana"
-        android:id="@+id/text_kana"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_kana"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/kanaInput"
         app:layout_constraintEnd_toStartOf="@+id/text_passes"
         app:layout_constraintStart_toEndOf="@+id/text_lives"
-        app:layout_constraintTop_toBottomOf="@+id/text_free_pass"
-        tools:text="が" />
+        app:layout_constraintTop_toBottomOf="@+id/text_free_pass">
+
+        <!-- Note that the big kana text size will be adjusted at runtime. -->
+        <TextView
+            style="@style/Text.Game.BigKana"
+            android:id="@+id/text_kana"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="が" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         style="@style/Text.Game"
@@ -79,9 +89,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/text_kana"
+        app:layout_constraintBottom_toBottomOf="@+id/layout_kana"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/text_kana"
+        app:layout_constraintTop_toTopOf="@+id/layout_kana"
         tools:text="♥\n♥\n♥\n❌\n❌" />
 
     <TextView
@@ -90,9 +100,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/text_kana"
+        app:layout_constraintBottom_toBottomOf="@+id/layout_kana"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/text_kana"
+        app:layout_constraintTop_toTopOf="@+id/layout_kana"
         tools:text="❓\n❓\n❌" />
 
     <TextView
@@ -131,9 +141,9 @@
         android:textAlignment="center"
         android:textSize="60sp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/text_kana"
+        app:layout_constraintBottom_toBottomOf="@+id/layout_kana"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/text_kana" />
+        app:layout_constraintTop_toTopOf="@+id/layout_kana" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

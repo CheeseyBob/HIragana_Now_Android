@@ -1,8 +1,8 @@
 package com.hiraganaNow;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -26,18 +26,17 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
         super.onViewCreated(view, savedInstanceState);
         binding.buttonPass.setOnClickListener(this::onClickPassButton);
         binding.kanaInput.setOnEditorActionListener(this::onEditorAction);
-        setKanaTextSize();
+        binding.layoutKana.addOnLayoutChangeListener(new SimpleOnLayoutChangeListener(this::setKanaTextSize));
         refreshView();
         requestInputFocus(binding.kanaInput);
     }
 
     private void setKanaTextSize() {
-        int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
-        int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
-        float maxHeight = screenHeight * 0.20f;
-        float maxWidth = screenWidth * 0.5f;
-        float size = Math.min(maxHeight, maxWidth);
-        binding.textKana.setTextSize(size);
+        float maxHeight = binding.layoutKana.getMeasuredHeight();
+        float maxWidth = binding.layoutKana.getMeasuredWidth();
+        float maxSize = Math.min(maxHeight, maxWidth);
+        float size = maxSize * 0.9f;
+        binding.textKana.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
     }
 
     private void onClickPassButton(View view) {
@@ -305,5 +304,13 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
         int count = Game.getPowerLevel();
         String text = Counters.getHorizontalTextNoMax(count, "💪");
         binding.textPower.setText(text);
+    }
+}
+
+class TestListener implements View.OnLayoutChangeListener {
+
+    @Override
+    public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
+
     }
 }
