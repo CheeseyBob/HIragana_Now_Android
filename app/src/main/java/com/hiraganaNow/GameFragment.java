@@ -1,6 +1,7 @@
 package com.hiraganaNow;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,8 +26,18 @@ public class GameFragment extends BoundFragment<FragmentGameBinding> {
         super.onViewCreated(view, savedInstanceState);
         binding.buttonPass.setOnClickListener(this::onClickPassButton);
         binding.kanaInput.setOnEditorActionListener(this::onEditorAction);
+        setKanaTextSize();
         refreshView();
         requestInputFocus(binding.kanaInput);
+    }
+
+    private void setKanaTextSize() {
+        int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+        int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+        float maxHeight = screenHeight * 0.20f;
+        float maxWidth = screenWidth * 0.5f;
+        float size = Math.min(maxHeight, maxWidth);
+        binding.textKana.setTextSize(size);
     }
 
     private void onClickPassButton(View view) {

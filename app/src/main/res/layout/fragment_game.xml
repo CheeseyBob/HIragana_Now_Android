@@ -3,23 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/game_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/Theme.HiraganaNow.FragmentLayout"
     tools:context=".GameFragment">
-
-    <TextView
-        style="@style/Text.Game"
-        android:id="@+id/text_lives"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/text_kana"
-        app:layout_constraintEnd_toStartOf="@+id/text_kana"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/text_kana"
-        tools:text="♥\n♥\n♥\n❌\n❌" />
 
     <TextView
         style="@style/Text.Game"
@@ -39,7 +27,7 @@
         android:id="@+id/text_power"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:textAlignment="center"
         android:textSize="9sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,7 +41,7 @@
         android:id="@+id/text_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:textAlignment="center"
         android:textSize="9sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -61,19 +49,6 @@
         app:layout_constraintTop_toBottomOf="@+id/text_power"
         tools:ignore="SmallSp"
         tools:text="🔶🔶🔶🔶🔶🔶🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸" />
-
-    <TextView
-        style="@style/Text.Game"
-        android:id="@+id/text_passes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/text_kana"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/text_kana"
-        app:layout_constraintTop_toTopOf="@+id/text_kana"
-        tools:text="❓\n❓\n❌" />
 
     <Button
         style="@style/Button"
@@ -85,16 +60,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_progress" />
 
+    <!-- Note that the big kana text size will be adjusted at runtime. -->
     <TextView
         style="@style/Text.Game.BigKana"
         android:id="@+id/text_kana"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_pass"
-        app:layout_constraintVertical_bias="0.2"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/kanaInput"
+        app:layout_constraintEnd_toStartOf="@+id/text_passes"
+        app:layout_constraintStart_toEndOf="@+id/text_lives"
+        app:layout_constraintTop_toBottomOf="@+id/text_free_pass"
         tools:text="が" />
+
+    <TextView
+        style="@style/Text.Game"
+        android:id="@+id/text_lives"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/text_kana"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_kana"
+        tools:text="♥\n♥\n♥\n❌\n❌" />
+
+    <TextView
+        style="@style/Text.Game"
+        android:id="@+id/text_passes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/text_kana"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_kana"
+        tools:text="❓\n❓\n❌" />
 
     <TextView
         style="@style/Text.Game"
@@ -113,14 +112,15 @@
         android:id="@+id/kanaInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
         android:ems="3"
         android:hint="@string/hint_game_input"
         android:importantForAutofill="no"
         android:inputType="textVisiblePassword"
         android:singleLine="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_kana" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         style="@style/Text.Game"
